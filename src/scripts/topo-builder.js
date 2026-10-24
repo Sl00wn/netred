@@ -22,12 +22,12 @@ export class NetworkTopologySimulator {
     this.isSimulating = false;
 
     this.nodeTypeIcons = {
-      router: '🖧',
-      switch: '🔀',
-      firewall: '🛡️',
-      server: '🖥️',
-      pc: '💻',
-      cloud: '☁️'
+      router: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="11" width="20" height="8" rx="2"></rect><circle cx="6" cy="15" r="1" fill="currentColor"></circle><circle cx="10" cy="15" r="1" fill="currentColor"></circle><path d="M14 15h4"></path><path d="M8 7l4-4 4 4"></path><path d="M12 3v8"></path></svg>`,
+      switch: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"></rect><path d="M6 12h4m-2-2 2 2-2 2"></path><path d="M18 12h-4m2-2-2 2 2 2"></path></svg>`,
+      firewall: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+      server: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
+      pc: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
+      cloud: `<svg class="device-node-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`
     };
 
     this.nodeTypeNames = {
@@ -56,9 +56,17 @@ export class NetworkTopologySimulator {
     // Ресайз окна — перерисовка связей
     window.addEventListener('resize', () => this.updateLinks());
 
-    // Перетаскивание узлов по холсту
+    // Перетаскивание узлов по холсту (мышь + сенсорный ввод)
     this.container.addEventListener('mousemove', (e) => this.handleMouseMove(e));
     window.addEventListener('mouseup', () => this.handleMouseUp());
+
+    this.container.addEventListener('touchmove', (e) => {
+      if (this.isDragging && e.touches && e.touches[0]) {
+        e.preventDefault();
+        this.handleMouseMove(e.touches[0]);
+      }
+    }, { passive: false });
+    window.addEventListener('touchend', () => this.handleMouseUp());
 
     // Клик по холсту (сброс выделения или завершение соединений)
     this.container.addEventListener('click', (e) => {
@@ -528,7 +536,7 @@ export class NetworkTopologySimulator {
       if (this.connectSourceId === node.id) el.classList.add('connect-source');
       if (this.pingSourceId === node.id) el.classList.add('ping-source');
 
-      const icon = this.nodeTypeIcons[node.type] || '💻';
+      const icon = this.nodeTypeIcons[node.type] || this.nodeTypeIcons.pc;
 
       el.innerHTML = `
         <div class="node-main-row">
@@ -546,6 +554,13 @@ export class NetworkTopologySimulator {
         e.stopPropagation();
         this.handleMouseDown(e, node);
       });
+
+      el.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+        if (e.touches && e.touches[0]) {
+          this.handleMouseDown(e.touches[0], node);
+        }
+      }, { passive: false });
 
       this.nodesLayer.appendChild(el);
     });
@@ -689,7 +704,12 @@ export class NetworkTopologySimulator {
             <span>Сохранить изменения</span>
           </button>
           <div style="display: flex; gap: 8px;">
-            <button class="minimal-btn" id="ping-from-node-btn" style="flex: 1;">⚡ Ping отсюда</button>
+            <button class="minimal-btn" id="ping-from-node-btn" style="flex: 1;">
+              <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Ping отсюда</span>
+            </button>
             <button class="minimal-btn" id="delete-curr-node-btn" style="color: var(--accent-rose);">Удалить узел</button>
           </div>
         </div>

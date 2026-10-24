@@ -7,10 +7,10 @@
   
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 
-  <!-- Colorpong Artefact Typography: DM Sans, DM Mono, Inter & JetBrains Mono -->
+  <!-- NetRed Typography: Inter & JetBrains Mono with full Cyrillic support -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- NetRed Main Stylesheet -->
   <link rel="stylesheet" href="./src/styles/main.css">
@@ -79,15 +79,33 @@
 
         <div class="topbar-divider"></div>
 
-        <!-- Action buttons -->
+        <!-- Action buttons with standard minimalist line SVGs -->
         <button class="topbar-icon-btn" id="canvas-ping-btn" title="Импульс по струнам сети (Space)">
-          <span class="icon">⚡</span>
+          <svg class="btn-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
         </button>
         <button class="topbar-icon-btn" id="audio-toggle-btn" title="Звуковые эффекты (M)">
-          <span class="icon">🔇</span>
+          <span class="audio-icon-wrap" id="audio-icon-container">
+            <svg class="btn-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </span>
         </button>
         <button class="topbar-icon-btn" id="hotkeys-btn" title="Горячие клавиши (?)">
-          <span class="icon">⌨️</span>
+          <svg class="btn-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <line x1="6" y1="8" x2="6.01" y2="8"></line>
+            <line x1="10" y1="8" x2="10.01" y2="8"></line>
+            <line x1="14" y1="8" x2="14.01" y2="8"></line>
+            <line x1="18" y1="8" x2="18.01" y2="8"></line>
+            <line x1="6" y1="12" x2="6.01" y2="12"></line>
+            <line x1="18" y1="12" x2="18.01" y2="12"></line>
+            <line x1="10" y1="12" x2="14" y2="12"></line>
+            <line x1="8" y1="16" x2="16" y2="16"></line>
+          </svg>
         </button>
 
         <!-- Engineer Profile Chip (Matching screenshot profile chip) -->
@@ -107,22 +125,35 @@
       <!-- LEFT SIDEBAR NAVIGATION (Matching screenshot vertical sidebar) -->
       <aside class="app-sidebar" id="app-sidebar">
         <div class="sidebar-top">
-          <!-- 2x2 Quick Actions Grid (like Support, Subscribers, Settings, Invoices in screenshot) -->
+          <!-- 2x2 Quick Actions Grid -->
           <div class="sidebar-quick-grid">
             <button class="quick-grid-card" id="quick-ping-card" title="Импульс сети">
-              <span class="qg-icon">⚡</span>
+              <svg class="qg-icon-svg" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
               <span class="qg-title">Импульс</span>
             </button>
             <button class="quick-grid-card" id="quick-fav-card" title="Избранные термины">
-              <span class="qg-icon">★</span>
+              <svg class="qg-icon-svg" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
               <span class="qg-title">Закладки</span>
             </button>
             <button class="quick-grid-card" id="quick-ai-card" title="Генератор макета AI">
-              <span class="qg-icon">✨</span>
+              <svg class="qg-icon-svg" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path>
+              </svg>
               <span class="qg-title">Макет AI</span>
             </button>
             <button class="quick-grid-card" id="quick-hotkeys-card" title="Горячие клавиши">
-              <span class="qg-icon">⌨️</span>
+              <svg class="qg-icon-svg" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <line x1="6" y1="8" x2="6.01" y2="8"></line>
+                <line x1="10" y1="8" x2="10.01" y2="8"></line>
+                <line x1="14" y1="8" x2="14.01" y2="8"></line>
+                <line x1="18" y1="8" x2="18.01" y2="8"></line>
+                <line x1="8" y1="16" x2="16" y2="16"></line>
+              </svg>
               <span class="qg-title">Клавиши</span>
             </button>
           </div>
@@ -133,42 +164,78 @@
           <!-- Vertical Navigation List (Tabs - NEVER SCROLLS) -->
           <nav class="sidebar-nav-list" id="nav-track">
             <button class="nav-item active" data-tab="lexicon">
-              <span class="nav-icon">📖</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+              </span>
               <span class="nav-label">Словарь понятий</span>
               <span class="nav-count">120+</span>
               <span class="nav-key">1</span>
             </button>
 
             <button class="nav-item" data-tab="osi">
-              <span class="nav-icon">🗺️</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </span>
               <span class="nav-label">Стек OSI</span>
               <span class="nav-count">7 L</span>
               <span class="nav-key">2</span>
             </button>
 
             <button class="nav-item" data-tab="calc">
-              <span class="nav-icon">🧮</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                  <line x1="8" y1="6" x2="16" y2="6"></line>
+                  <line x1="16" y1="14" x2="16" y2="18"></line>
+                  <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path>
+                </svg>
+              </span>
               <span class="nav-label">Калькулятор подсетей</span>
               <span class="nav-count">VLSM</span>
               <span class="nav-key">3</span>
             </button>
 
             <button class="nav-item" data-tab="sim">
-              <span class="nav-icon">📡</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              </span>
               <span class="nav-label">Симулятор пакетов</span>
               <span class="nav-count">9 прот.</span>
               <span class="nav-key">4</span>
             </button>
 
             <button class="nav-item" data-tab="ports">
-              <span class="nav-icon">🔌</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="9" x2="20" y2="9"></line>
+                  <line x1="4" y1="15" x2="20" y2="15"></line>
+                  <line x1="10" y1="3" x2="8" y2="21"></line>
+                  <line x1="16" y1="3" x2="14" y2="21"></line>
+                </svg>
+              </span>
               <span class="nav-label">Справочник портов</span>
               <span class="nav-count">1000+</span>
               <span class="nav-key">5</span>
             </button>
 
             <button class="nav-item" data-tab="topo">
-              <span class="nav-icon">🕸️</span>
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="2" width="6" height="6" rx="1"></rect>
+                  <rect x="3" y="16" width="6" height="6" rx="1"></rect>
+                  <rect x="15" y="16" width="6" height="6" rx="1"></rect>
+                  <path d="M12 8v4m0 0H6v4m6-4h6v4"></path>
+                </svg>
+              </span>
               <span class="nav-label">Конструктор сети</span>
               <span class="nav-badge-live">LIVE</span>
               <span class="nav-key">6</span>
@@ -183,7 +250,9 @@
             <div class="status-box-desc">800Gbps DWDM Active</div>
           </div>
           <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Свернуть / развернуть меню">
-            <span class="collapse-icon">◀</span>
+            <svg class="collapse-icon-svg" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
             <span class="collapse-text">Свернуть</span>
           </button>
         </div>
@@ -194,7 +263,12 @@
         <!-- Subheader / Breadcrumb Bar (Matching screenshot breadcrumb bar) -->
         <div class="app-subheader">
           <div class="subheader-breadcrumb">
-            <span class="home-icon">🏠</span>
+            <span class="home-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
             <span class="bc-sep">/</span>
             <span class="bc-hub">Хаб сетевого инженера</span>
             <span class="bc-sep">/</span>
@@ -232,7 +306,10 @@
           </div>
           <button class="minimal-btn" id="clear-search-btn">Сброс</button>
           <button class="minimal-btn" id="favorites-filter-btn">
-            <span>★ Избранное (<span id="favorites-count-badge">0</span>)</span>
+            <svg class="star-icon-svg" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>Избранное (<span id="favorites-count-badge">0</span>)</span>
           </button>
         </div>
 
@@ -407,27 +484,63 @@
             <span class="topo-group-label">Добавить узел:</span>
             <div class="topo-btn-group">
               <button class="topo-device-btn" data-device-type="router" title="Добавить маршрутизатор">
-                <span class="dev-icon">🖧</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="11" width="20" height="8" rx="2"></rect>
+                    <circle cx="6" cy="15" r="1" fill="currentColor"></circle>
+                    <circle cx="10" cy="15" r="1" fill="currentColor"></circle>
+                    <path d="M14 15h4"></path>
+                    <path d="M8 7l4-4 4 4"></path>
+                    <path d="M12 3v8"></path>
+                  </svg>
+                </span>
                 <span>Маршрутизатор</span>
               </button>
               <button class="topo-device-btn" data-device-type="switch" title="Добавить коммутатор">
-                <span class="dev-icon">🔀</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="10" rx="2"></rect>
+                    <path d="M6 12h4m-2-2 2 2-2 2"></path>
+                    <path d="M18 12h-4m2-2-2 2 2 2"></path>
+                  </svg>
+                </span>
                 <span>Коммутатор</span>
               </button>
               <button class="topo-device-btn" data-device-type="firewall" title="Добавить фаервол">
-                <span class="dev-icon">🛡️</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </span>
                 <span>Фаервол</span>
               </button>
               <button class="topo-device-btn" data-device-type="server" title="Добавить сервер">
-                <span class="dev-icon">🖥️</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="8" rx="2"></rect>
+                    <rect x="2" y="14" width="20" height="8" rx="2"></rect>
+                    <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                    <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                  </svg>
+                </span>
                 <span>Сервер</span>
               </button>
               <button class="topo-device-btn" data-device-type="pc" title="Добавить рабочую станцию">
-                <span class="dev-icon">💻</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </span>
                 <span>ПК / Хост</span>
               </button>
               <button class="topo-device-btn" data-device-type="cloud" title="Добавить Интернет / Облако">
-                <span class="dev-icon">☁️</span>
+                <span class="dev-icon">
+                  <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                  </svg>
+                </span>
                 <span>Интернет</span>
               </button>
             </div>
@@ -439,16 +552,31 @@
             <span class="topo-group-label">Режим:</span>
             <div class="topo-btn-group">
               <button class="topo-mode-btn active" data-mode="select" title="Выбор и перемещение узлов">
-                <span>👆 Выбор</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+                  <path d="m13 13 6 6"></path>
+                </svg>
+                <span>Выбор</span>
               </button>
               <button class="topo-mode-btn" data-mode="connect" title="Соединить два узла кабелем">
-                <span>🔗 Соединить</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                <span>Соединить</span>
               </button>
               <button class="topo-mode-btn" data-mode="ping" title="Отправить ICMP Ping пакет">
-                <span>⚡ Ping тест</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>Ping тест</span>
               </button>
               <button class="topo-mode-btn" data-mode="delete" title="Удаление узла или линка">
-                <span>🗑️ Удалить</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Удалить</span>
               </button>
             </div>
           </div>
@@ -457,9 +585,17 @@
 
           <div class="topo-actions-group">
             <button class="accent-btn" id="topo-ai-btn">
-              <span>✨ Создать из описания</span>
+              <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path>
+              </svg>
+              <span>Создать из описания</span>
             </button>
             <button class="minimal-btn" id="topo-clear-btn" title="Очистить рабочее поле">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
               <span>Очистить</span>
             </button>
           </div>
@@ -551,18 +687,21 @@
         <div class="presets-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
           <span class="presets-label">Готовые архитектурные шаблоны:</span>
           <div class="preset-chips" style="gap: 8px;">
-            <button class="preset-chip topo-preset-btn" data-preset="office_vlans">🏢 Офис с 2 отделами и VLAN</button>
-            <button class="preset-chip topo-preset-btn" data-preset="enterprise_dmz">🛡️ Корпоративная сеть с DMZ и WAF</button>
-            <button class="preset-chip topo-preset-btn" data-preset="spine_leaf">☁️ Дата-центр (Spine-Leaf)</button>
-            <button class="preset-chip topo-preset-btn" data-preset="branch_wan">🌐 Главный офис и 2 филиала (WAN)</button>
-            <button class="preset-chip topo-preset-btn" data-preset="star_simple">⭐ Топология «Звезда» (Router + 4 ПК)</button>
+            <button class="preset-chip topo-preset-btn" data-preset="office_vlans">Офис с 2 отделами и VLAN</button>
+            <button class="preset-chip topo-preset-btn" data-preset="enterprise_dmz">Корпоративная сеть с DMZ и WAF</button>
+            <button class="preset-chip topo-preset-btn" data-preset="spine_leaf">Дата-центр (Spine-Leaf)</button>
+            <button class="preset-chip topo-preset-btn" data-preset="branch_wan">Главный офис и филиалы (WAN)</button>
+            <button class="preset-chip topo-preset-btn" data-preset="star_simple">Топология «Звезда» (Router + 4 ПК)</button>
           </div>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px;">
           <button class="minimal-btn" id="topo-ai-cancel-btn">Отмена</button>
           <button class="accent-btn" id="topo-ai-generate-btn">
-            <span>✨ Построить топологию</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"></path>
+            </svg>
+            <span>Построить топологию</span>
           </button>
         </div>
       </div>
@@ -671,6 +810,61 @@
       <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
+
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- Mobile Bottom Navigation Bar (Visible on mobile <= 768px) -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <button class="mob-nav-btn active" data-tab="lexicon">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+      <span>Словарь</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="osi">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>OSI</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="calc">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+        <line x1="8" y1="6" x2="16" y2="6"></line>
+        <line x1="16" y1="14" x2="16" y2="18"></line>
+        <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path>
+      </svg>
+      <span>CIDR</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="sim">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+      </svg>
+      <span>Симулятор</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="ports">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="9" x2="20" y2="9"></line>
+        <line x1="4" y1="15" x2="20" y2="15"></line>
+        <line x1="10" y1="3" x2="8" y2="21"></line>
+        <line x1="16" y1="3" x2="14" y2="21"></line>
+      </svg>
+      <span>Порты</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="topo">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="6" rx="1"></rect>
+        <rect x="3" y="16" width="6" height="6" rx="1"></rect>
+        <rect x="15" y="16" width="6" height="6" rx="1"></rect>
+        <path d="M12 8v4m0 0H6v4m6-4h6v4"></path>
+      </svg>
+      <span>Топология</span>
+    </button>
+  </nav>
 
   <!-- Toast Notification -->
   <div class="minimal-toast" id="cyber-toast"></div>

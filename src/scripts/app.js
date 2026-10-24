@@ -87,14 +87,29 @@ export class CyberNetApp {
       this.canvas = new CyberCanvas(canvasEl);
     }
 
-    // Переключатель звука
+    // Переключатель звука с минималистичной векторной SVG-иконкой
     const audioBtn = document.getElementById('audio-toggle-btn');
     if (audioBtn) {
       audioBtn.addEventListener('click', () => {
         const isMuted = cyberAudio.toggleMute();
         audioBtn.classList.toggle('active', !isMuted);
-        const iconSpan = audioBtn.querySelector('.icon') || audioBtn;
-        iconSpan.textContent = isMuted ? '🔇' : '🔊';
+        const iconWrap = audioBtn.querySelector('#audio-icon-container') || audioBtn;
+        if (isMuted) {
+          iconWrap.innerHTML = `
+            <svg class="btn-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          `;
+        } else {
+          iconWrap.innerHTML = `
+            <svg class="btn-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          `;
+        }
         this.showToast(!isMuted ? "Звуковые эффекты включены" : "Звуковые эффекты отключены");
       });
     }
@@ -155,10 +170,20 @@ export class CyberNetApp {
     const sidebar = document.getElementById('app-sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle-btn');
     const sidebarCollapse = document.getElementById('sidebar-collapse-btn');
+    const backdrop = document.getElementById('sidebar-backdrop');
 
     if (sidebarToggle && sidebar) {
       sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('open');
+        if (backdrop) backdrop.classList.toggle('active', sidebar.classList.contains('open'));
+        cyberAudio.playClick();
+      });
+    }
+
+    if (backdrop && sidebar) {
+      backdrop.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('active');
         cyberAudio.playClick();
       });
     }
@@ -167,9 +192,9 @@ export class CyberNetApp {
       sidebarCollapse.addEventListener('click', () => {
         sidebar.classList.toggle('collapsed');
         const isCol = sidebar.classList.contains('collapsed');
-        const icon = sidebarCollapse.querySelector('.collapse-icon');
+        const icon = sidebarCollapse.querySelector('.collapse-icon-svg');
         const text = sidebarCollapse.querySelector('.collapse-text');
-        if (icon) icon.textContent = isCol ? '▶' : '◀';
+        if (icon) icon.style.transform = isCol ? 'rotate(180deg)' : 'rotate(0deg)';
         if (text) text.textContent = isCol ? '' : 'Свернуть';
         cyberAudio.playClick();
       });
@@ -226,9 +251,18 @@ export class CyberNetApp {
       });
     }
 
-    // Навигация по вкладкам
+    // Навигация по вкладкам (десктопная боковая панель)
     document.querySelectorAll('.nav-item, .cyber-nav-tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
+        const targetTab = e.currentTarget.getAttribute('data-tab');
+        this.switchTab(targetTab);
+        cyberAudio.playClick();
+      });
+    });
+
+    // Навигация по вкладкам (мобильная нижняя панель)
+    document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         const targetTab = e.currentTarget.getAttribute('data-tab');
         this.switchTab(targetTab);
         cyberAudio.playClick();
@@ -293,13 +327,9 @@ export class CyberNetApp {
           }
           this.showToast("Импульс отправлен по струнам сети");
         } else if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') {
-          const isMuted = cyberAudio.toggleMute();
           if (audioBtn) {
-            audioBtn.classList.toggle('active', !isMuted);
-            const iconSpan = audioBtn.querySelector('.icon') || audioBtn;
-            iconSpan.textContent = isMuted ? '🔇' : '🔊';
+            audioBtn.click();
           }
-          this.showToast(!isMuted ? "Звуковые эффекты включены" : "Звуковые эффекты отключены");
         } else if (e.key === '?' || (e.shiftKey && e.key === '?')) {
           if (hotkeysModal) hotkeysModal.classList.toggle('open');
         }
@@ -312,8 +342,23 @@ export class CyberNetApp {
 
   switchTab(tabId) {
     this.currentTab = tabId;
+
+    // Закрытие мобильного меню при выборе вкладки
+    const sidebar = document.getElementById('app-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar && sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('active');
+    }
+
+    // Синхронизация десктопного меню
     document.querySelectorAll('.nav-item, .cyber-nav-tab').forEach(t => {
       t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+    });
+
+    // Синхронизация мобильного нижнего меню
+    document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
     });
 
     document.querySelectorAll('.tab-view').forEach(view => {
@@ -437,7 +482,12 @@ export class CyberNetApp {
     if (filtered.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">🔍</div>
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
           <div class="empty-title">Ничего не найдено</div>
           <div class="empty-desc">Попробуйте изменить поисковый запрос или сбросить активные фильтры.</div>
           <button class="accent-btn" id="reset-filters-btn">Сбросить все фильтры</button>
@@ -479,7 +529,9 @@ export class CyberNetApp {
             <div class="card-actions-group">
               <span class="card-tech-id">ID: 0x${term.id.slice(0, 3).toUpperCase()}</span>
               <button class="favorite-btn ${isFav ? 'is-fav' : ''}" data-id="${term.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
-                ${isFav ? '★' : '☆'}
+                <svg class="fav-star-svg" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="${isFav ? 'currentColor' : 'none'}" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
               </button>
             </div>
           </div>
@@ -555,7 +607,10 @@ export class CyberNetApp {
             <div class="modal-subtitle">${term.fullNameRu} — <span class="dim-text">${term.fullName}</span></div>
           </div>
           <button class="minimal-btn modal-fav-btn ${isFav ? 'is-fav' : ''}" data-id="${term.id}">
-            ${isFav ? '★ В избранном' : '☆ В избранное'}
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="${isFav ? 'currentColor' : 'none'}" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>${isFav ? 'В избранном' : 'В избранное'}</span>
           </button>
         </div>
       </div>
@@ -563,7 +618,11 @@ export class CyberNetApp {
       <div class="modal-body-grid">
         <div class="detail-block">
           <div class="block-title">
-            <span class="title-glyph">✦</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
             <span>Архитектура и принцип работы</span>
           </div>
           <div class="block-content rich-text">
@@ -573,7 +632,10 @@ export class CyberNetApp {
 
         <div class="detail-block">
           <div class="block-title">
-            <span class="title-glyph">⚙</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
             <span>Конфигурация и шаблоны команд</span>
           </div>
           <div class="cli-container">
@@ -582,7 +644,11 @@ export class CyberNetApp {
                 <div class="cli-box-header">
                   <span class="cli-os-tag">${cmd.os}</span>
                   <button class="copy-cli-btn" data-cli="${encodeURIComponent(cmd.cmd)}">
-                    📋 Скопировать
+                    <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Скопировать</span>
                   </button>
                 </div>
                 <pre class="cli-code"><code>${this.escapeHtml(cmd.cmd)}</code></pre>
@@ -593,7 +659,11 @@ export class CyberNetApp {
 
         <div class="detail-block alert-block">
           <div class="block-title alert-title">
-            <span class="title-glyph">⚠️</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
             <span>Диагностика и устранение неисправностей (Troubleshooting)</span>
           </div>
           <div class="block-content troubleshooting-content">
@@ -610,9 +680,10 @@ export class CyberNetApp {
         navigator.clipboard.writeText(text).then(() => {
           cyberAudio.playSuccess();
           this.showToast("Команда скопирована в буфер обмена");
-          e.currentTarget.textContent = "✓ Скопировано";
+          const span = e.currentTarget.querySelector('span');
+          if (span) span.textContent = "Скопировано";
           setTimeout(() => {
-            e.currentTarget.textContent = "📋 Скопировать";
+            if (span) span.textContent = "Скопировать";
           }, 2000);
         });
       });
@@ -625,7 +696,12 @@ export class CyberNetApp {
         this.toggleFavorite(term.id);
         const nowFav = this.isFavorite(term.id);
         modalFavBtn.classList.toggle('is-fav', nowFav);
-        modalFavBtn.innerHTML = nowFav ? '★ В избранном' : '☆ В избранное';
+        modalFavBtn.innerHTML = `
+          <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="${nowFav ? 'currentColor' : 'none'}" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>${nowFav ? 'В избранном' : 'В избранное'}</span>
+        `;
       });
     }
 
@@ -892,7 +968,13 @@ export class CyberNetApp {
       if (displayEl) {
         displayEl.innerHTML = `
           <div class="sim-node client-node">
-            <div class="sim-node-icon">💻</div>
+            <div class="sim-node-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
             <div class="sim-node-name">${currentStep.sender.split(' ')[0]}</div>
             <div class="sim-node-state">${currentStep.stateClient}</div>
           </div>
@@ -907,7 +989,14 @@ export class CyberNetApp {
           </div>
 
           <div class="sim-node server-node">
-            <div class="sim-node-icon">🖧</div>
+            <div class="sim-node-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2"></rect>
+                <rect x="2" y="14" width="20" height="8" rx="2"></rect>
+                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+              </svg>
+            </div>
             <div class="sim-node-name">${currentStep.receiver.split(' ')[0]}</div>
             <div class="sim-node-state">${currentStep.stateServer}</div>
           </div>
