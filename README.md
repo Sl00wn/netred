@@ -1,4 +1,4 @@
-# 🌐 NetPulse // Интерактивный хаб сетевого инженера
+# 🌐 NetRed // Интерактивный хаб сетевого инженера
 
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Version](https://img.shields.io/badge/version-2.7.0-0da9f3.svg)]()

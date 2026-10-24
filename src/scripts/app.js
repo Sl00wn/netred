@@ -1,5 +1,5 @@
 // ============================================================================
-// NETPULSE APP // MAIN CONTROLLER
+// NETRED APP // MAIN CONTROLLER
 // Справочник сетевого инженера
 // ============================================================================
 
@@ -51,7 +51,7 @@ export class CyberNetApp {
 
   loadFavorites() {
     try {
-      const stored = localStorage.getItem('netpulse_favorites') || localStorage.getItem('cybernet_favorites');
+      const stored = localStorage.getItem('netred_favorites') || localStorage.getItem('netpulse_favorites') || localStorage.getItem('cybernet_favorites');
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
       return [];
@@ -60,7 +60,7 @@ export class CyberNetApp {
 
   saveFavorites() {
     try {
-      localStorage.setItem('netpulse_favorites', JSON.stringify(this.favorites));
+      localStorage.setItem('netred_favorites', JSON.stringify(this.favorites));
     } catch (e) {}
   }
 
