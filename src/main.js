@@ -1,11 +1,10 @@
 // ============================================================================
-// CYBERNET // VITE APPLICATION ENTRY POINT
+// NETRED // APPLICATION ENTRY POINT
 // ============================================================================
 
-import './styles/main.css';
 import { CyberNetApp } from './scripts/app.js';
 
-// Initialize CyberNet App
+// Initialize NetRed App
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     window.cyberApp = new CyberNetApp();
