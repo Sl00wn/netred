@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetPulse // Справочник сетевого инженера</title>
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Colorpong Artefact Typography: DM Sans, DM Mono, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Interactive Dynamic Ambient Network Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Ambient Radial Glow Overlay -->
+  <div class="ambient-glow"></div>
+
+  <!-- Main App Shell (Matching screenshot layout) -->
+  <div class="app-shell" id="app-shell">
+    
+    <!-- TOP NAVIGATION BAR (Matching screenshot top header) -->
+    <header class="app-topbar">
+      <!-- Left: Mobile toggle & Brand -->
+      <div class="topbar-left">
+        <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Переключить боковую панель">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="topbar-brand">
+          <div class="brand-logo-mini" title="NetPulse Hub">
+            <svg class="data-strings-logo-mini" viewBox="0 0 24 24" fill="none">
+              <path d="M3 6 C8 2, 11 22, 21 5" stroke="#0da9f3" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M3 12 C9 19, 15 5, 21 12" stroke="#e0248a" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M3 18 C13 8, 16 22, 21 17" stroke="#8b5cf6" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="brand-title-text">NetPulse</span>
+          <span class="brand-status-dot" title="Система активна"></span>
+        </div>
+      </div>
+
+      <!-- Center: Universal Global Search Input (Matching screenshot search pill) -->
+      <div class="topbar-search">
+        <div class="search-input-pill">
+          <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="global-header-search" 
+            placeholder="Поиск по терминам, портам, RFC..." 
+            autocomplete="off"
+          />
+          <kbd class="search-shortcut-kbd">⌘K / /</kbd>
+        </div>
+      </div>
+
+      <!-- Right: Telemetry & Controls & Profile (Matching screenshot top right) -->
+      <div class="topbar-right">
+        <!-- Telemetry badge -->
+        <div class="topbar-telemetry">
+          <span class="tele-status-pulse"></span>
+          <span class="tele-val" id="stat-latency">8.4 ms</span>
+          <span class="tele-sep">·</span>
+          <span class="tele-val" id="stat-pps">14.2k пак/с</span>
+        </div>
+
+        <div class="topbar-divider"></div>
+
+        <!-- Action buttons -->
+        <button class="topbar-icon-btn" id="canvas-ping-btn" title="Импульс по струнам сети (Space)">
+          <span class="icon">⚡</span>
+        </button>
+        <button class="topbar-icon-btn" id="audio-toggle-btn" title="Звуковые эффекты (M)">
+          <span class="icon">🔇</span>
+        </button>
+        <button class="topbar-icon-btn" id="hotkeys-btn" title="Горячие клавиши (?)">
+          <span class="icon">⌨️</span>
+        </button>
+
+        <!-- Engineer Profile Chip (Matching screenshot profile chip) -->
+        <div class="engineer-profile" title="Сетевой инженер // Профиль">
+          <div class="engineer-avatar">NE</div>
+          <div class="engineer-meta">
+            <span class="engineer-name">Инженер</span>
+            <span class="engineer-role">Online</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BODY WRAPPER: SIDEBAR + MAIN CONTENT (Matching screenshot layout) -->
+    <div class="app-body-container">
+      
+      <!-- LEFT SIDEBAR NAVIGATION (Matching screenshot vertical sidebar) -->
+      <aside class="app-sidebar" id="app-sidebar">
+        <div class="sidebar-top">
+          <!-- 2x2 Quick Actions Grid (like Support, Subscribers, Settings, Invoices in screenshot) -->
+          <div class="sidebar-quick-grid">
+            <button class="quick-grid-card" id="quick-ping-card" title="Импульс сети">
+              <span class="qg-icon">⚡</span>
+              <span class="qg-title">Импульс</span>
+            </button>
+            <button class="quick-grid-card" id="quick-fav-card" title="Избранные термины">
+              <span class="qg-icon">★</span>
+              <span class="qg-title">Закладки</span>
+            </button>
+            <button class="quick-grid-card" id="quick-ai-card" title="Генератор макета AI">
+              <span class="qg-icon">✨</span>
+              <span class="qg-title">Макет AI</span>
+            </button>
+            <button class="quick-grid-card" id="quick-hotkeys-card" title="Горячие клавиши">
+              <span class="qg-icon">⌨️</span>
+              <span class="qg-title">Клавиши</span>
+            </button>
+          </div>
+
+          <!-- Section Label -->
+          <div class="sidebar-section-label">РАЗДЕЛЫ ХАБА</div>
+
+          <!-- Vertical Navigation List (Tabs - NEVER SCROLLS) -->
+          <nav class="sidebar-nav-list" id="nav-track">
+            <button class="nav-item active" data-tab="lexicon">
+              <span class="nav-icon">📖</span>
+              <span class="nav-label">Словарь понятий</span>
+              <span class="nav-count">120+</span>
+              <span class="nav-key">1</span>
+            </button>
+
+            <button class="nav-item" data-tab="osi">
+              <span class="nav-icon">🗺️</span>
+              <span class="nav-label">Стек OSI</span>
+              <span class="nav-count">7 L</span>
+              <span class="nav-key">2</span>
+            </button>
+
+            <button class="nav-item" data-tab="calc">
+              <span class="nav-icon">🧮</span>
+              <span class="nav-label">Калькулятор подсетей</span>
+              <span class="nav-count">VLSM</span>
+              <span class="nav-key">3</span>
+            </button>
+
+            <button class="nav-item" data-tab="sim">
+              <span class="nav-icon">📡</span>
+              <span class="nav-label">Симулятор пакетов</span>
+              <span class="nav-count">9 прот.</span>
+              <span class="nav-key">4</span>
+            </button>
+
+            <button class="nav-item" data-tab="ports">
+              <span class="nav-icon">🔌</span>
+              <span class="nav-label">Справочник портов</span>
+              <span class="nav-count">1000+</span>
+              <span class="nav-key">5</span>
+            </button>
+
+            <button class="nav-item" data-tab="topo">
+              <span class="nav-icon">🕸️</span>
+              <span class="nav-label">Конструктор сети</span>
+              <span class="nav-badge-live">LIVE</span>
+              <span class="nav-key">6</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Sidebar Bottom Footer -->
+        <div class="sidebar-bottom">
+          <div class="sidebar-status-box">
+            <div class="status-box-title">Data Strings v2.7</div>
+            <div class="status-box-desc">800Gbps DWDM Active</div>
+          </div>
+          <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Свернуть / развернуть меню">
+            <span class="collapse-icon">◀</span>
+            <span class="collapse-text">Свернуть</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT WRAPPER -->
+      <main class="app-main-content">
+        <!-- Subheader / Breadcrumb Bar (Matching screenshot breadcrumb bar) -->
+        <div class="app-subheader">
+          <div class="subheader-breadcrumb">
+            <span class="home-icon">🏠</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-hub">Хаб сетевого инженера</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-active" id="header-breadcrumb">Словарь понятий & RFC</span>
+          </div>
+          <div class="subheader-status">
+            <span class="status-dot-green"></span>
+            <span class="status-text">Оптический транк синхронизирован · 100Gbps LIVE</span>
+          </div>
+        </div>
+
+        <!-- Tab Views Container -->
+        <div class="tab-views-container">
+
+          <!-- ====================================================================
+               VIEW 1: GLOSSARY / LEXICON
+               ==================================================================== -->
+          <section class="tab-view active" id="view-lexicon">
+      <!-- Search & Filters Container -->
+      <section class="search-panel">
+        <div class="search-row">
+          <div class="search-input-wrapper">
+            <svg class="search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="glossary-search" 
+              class="search-input" 
+              placeholder="Поиск по термину, русскому описанию, протоколу или номеру RFC..."
+              autocomplete="off"
+            >
+            <div class="search-key-badge">⌘K / /</div>
+          </div>
+          <button class="minimal-btn" id="clear-search-btn">Сброс</button>
+          <button class="minimal-btn" id="favorites-filter-btn">
+            <span>★ Избранное (<span id="favorites-count-badge">0</span>)</span>
+          </button>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="filters-container">
+          <div class="filter-group">
+            <span class="filter-label">Категория:</span>
+            <div class="filter-pills">
+              <button class="filter-pill active" data-category="all">Все</button>
+              <button class="filter-pill" data-category="Switching">Коммутация (L2)</button>
+              <button class="filter-pill" data-category="Routing">Маршрутизация (L3)</button>
+              <button class="filter-pill" data-category="Transport">Транспорт (L4)</button>
+              <button class="filter-pill" data-category="Security">Безопасность и VPN</button>
+              <button class="filter-pill" data-category="SDN">SDN и телеметрия</button>
+              <button class="filter-pill" data-category="Diagnostics">Диагностика</button>
+              <button class="filter-pill" data-category="Application">Прикладной (L7)</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Уровень OSI:</span>
+            <div class="filter-pills">
+              <button class="layer-pill active" data-layer="all">Все уровни</button>
+              <button class="layer-pill" data-layer="2">L2 Канальный</button>
+              <button class="layer-pill" data-layer="3">L3 Сетевой</button>
+              <button class="layer-pill" data-layer="4">L4 Транспортный</button>
+              <button class="layer-pill" data-layer="7">L7 Прикладной</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-info">
+          <span id="glossary-results-count">Загрузка понятий...</span>
+          <span class="results-hint">Нажмите на карточку для просмотра CLI команд и диагностики</span>
+        </div>
+      </section>
+
+      <!-- Terms Grid -->
+      <section class="cards-grid" id="glossary-grid"></section>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 2: OSI 7-LAYER NAVIGATOR
+         ==================================================================== -->
+    <section class="tab-view" id="view-osi">
+      <div class="content-header-card">
+        <h2 class="view-heading">Модель взаимодействия открытых систем (OSI Stack)</h2>
+        <p class="view-subheading">
+          Интерактивная карта 7 уровней сетевого стека. Выберите нужный уровень для фильтрации понятий и протоколов.
+        </p>
+      </div>
+      <div class="osi-stack-container" id="osi-stack-container"></div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 3: CIDR & SUBNET CALCULATOR
+         ==================================================================== -->
+    <section class="tab-view" id="view-calc">
+      <div class="calc-panel">
+        <div class="calc-form">
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="calc-ip">IPv4-адрес или префикс</label>
+              <input type="text" id="calc-ip" class="form-input" value="192.168.1.100" placeholder="например, 10.50.0.1 или 172.16.0.0/22">
+            </div>
+
+            <div class="form-field" style="max-width: 280px;">
+              <label class="form-label" for="calc-mask">Маска подсети (CIDR)</label>
+              <select id="calc-mask" class="form-select"></select>
+            </div>
+
+            <button class="accent-btn" id="run-calc-btn">
+              <span>Рассчитать подсеть</span>
+            </button>
+          </div>
+
+          <div class="presets-row">
+            <span class="presets-label">Быстрые пресеты:</span>
+            <div class="preset-chips">
+              <button class="preset-chip" data-cidr="8">/8</button>
+              <button class="preset-chip" data-cidr="16">/16</button>
+              <button class="preset-chip" data-cidr="24">/24</button>
+              <button class="preset-chip" data-cidr="27">/27</button>
+              <button class="preset-chip" data-cidr="29">/29</button>
+              <button class="preset-chip" data-cidr="30">/30 (Точка-точка / P2P)</button>
+              <button class="preset-chip" data-cidr="31">/31 (RFC 3021 P2P)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="calc-results"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 4: PROTOCOL FLOW SIMULATOR
+         ==================================================================== -->
+    <section class="tab-view" id="view-sim">
+      <div class="sim-wrapper">
+        <div class="sim-header-bar">
+          <div class="sim-select-group">
+            <label class="form-label" for="sim-select" style="margin: 0;">Сценарий:</label>
+            <select id="sim-select" class="form-select">
+              <option value="tcp">TCP 3-Way Handshake (Установление TCP-соединения)</option>
+              <option value="arp">Разрешение ARP (Определение MAC-адреса по IP)</option>
+              <option value="dns">Рекурсивный DNS-запрос (Поиск IP для example.com)</option>
+            </select>
+          </div>
+
+          <div class="sim-actions">
+            <button class="accent-btn" id="sim-step-btn">Следующий шаг</button>
+            <button class="minimal-btn" id="sim-reset-btn">Сброс</button>
+          </div>
+        </div>
+
+        <!-- Visual Flow Arena -->
+        <div class="sim-arena" id="sim-visual-display"></div>
+
+        <!-- Terminal Logs -->
+        <div class="sim-log-box">
+          <h3 id="sim-title" class="sim-log-title"></h3>
+          <p id="sim-desc" class="sim-log-desc"></p>
+          <div class="sim-log-list" id="sim-log-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 5: PORTS MATRIX
+         ==================================================================== -->
+    <section class="tab-view" id="view-ports">
+      <div class="search-panel">
+        <div class="search-row">
+          <div class="search-input-wrapper">
+            <svg class="search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="port-search-input" 
+              class="search-input" 
+              placeholder="Поиск по номеру порта или протоколу (22, 53, 179, BGP, DNS, WireGuard)..."
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 100px;">Порт</th>
+              <th style="width: 110px;">Протокол</th>
+              <th style="width: 220px;">Служба</th>
+              <th>Назначение и применение</th>
+            </tr>
+          </thead>
+          <tbody id="ports-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 6: NETWORK TOPOLOGY BUILDER & SIMULATOR
+         ==================================================================== -->
+    <section class="tab-view" id="view-topo">
+      <!-- Topo Header Bar -->
+      <div class="topo-toolbar-panel">
+        <div class="topo-tools-row">
+          <div class="topo-group">
+            <span class="topo-group-label">Добавить узел:</span>
+            <div class="topo-btn-group">
+              <button class="topo-device-btn" data-device-type="router" title="Добавить маршрутизатор">
+                <span class="dev-icon">🖧</span>
+                <span>Маршрутизатор</span>
+              </button>
+              <button class="topo-device-btn" data-device-type="switch" title="Добавить коммутатор">
+                <span class="dev-icon">🔀</span>
+                <span>Коммутатор</span>
+              </button>
+              <button class="topo-device-btn" data-device-type="firewall" title="Добавить фаервол">
+                <span class="dev-icon">🛡️</span>
+                <span>Фаервол</span>
+              </button>
+              <button class="topo-device-btn" data-device-type="server" title="Добавить сервер">
+                <span class="dev-icon">🖥️</span>
+                <span>Сервер</span>
+              </button>
+              <button class="topo-device-btn" data-device-type="pc" title="Добавить рабочую станцию">
+                <span class="dev-icon">💻</span>
+                <span>ПК / Хост</span>
+              </button>
+              <button class="topo-device-btn" data-device-type="cloud" title="Добавить Интернет / Облако">
+                <span class="dev-icon">☁️</span>
+                <span>Интернет</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="topo-divider"></div>
+
+          <div class="topo-group">
+            <span class="topo-group-label">Режим:</span>
+            <div class="topo-btn-group">
+              <button class="topo-mode-btn active" data-mode="select" title="Выбор и перемещение узлов">
+                <span>👆 Выбор</span>
+              </button>
+              <button class="topo-mode-btn" data-mode="connect" title="Соединить два узла кабелем">
+                <span>🔗 Соединить</span>
+              </button>
+              <button class="topo-mode-btn" data-mode="ping" title="Отправить ICMP Ping пакет">
+                <span>⚡ Ping тест</span>
+              </button>
+              <button class="topo-mode-btn" data-mode="delete" title="Удаление узла или линка">
+                <span>🗑️ Удалить</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="topo-divider"></div>
+
+          <div class="topo-actions-group">
+            <button class="accent-btn" id="topo-ai-btn">
+              <span>✨ Создать из описания</span>
+            </button>
+            <button class="minimal-btn" id="topo-clear-btn" title="Очистить рабочее поле">
+              <span>Очистить</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Workspace Arena -->
+      <div class="topo-workspace-grid">
+        <!-- Interactive Canvas Stage -->
+        <div class="topo-canvas-container" id="topo-canvas-container">
+          <svg id="topo-svg-links" class="topo-svg-layer"></svg>
+          <div id="topo-nodes-layer" class="topo-nodes-layer"></div>
+          
+          <!-- Canvas Overlay Status -->
+          <div class="topo-mode-indicator" id="topo-mode-indicator">
+            <span class="mode-dot"></span>
+            <span id="topo-mode-text">Режим: Выбор и перемещение узлов</span>
+          </div>
+          <div class="topo-canvas-stats" id="topo-canvas-stats">
+            Узлов: 0 | Линков: 0
+          </div>
+        </div>
+
+        <!-- Sidebar Details & Logs -->
+        <div class="topo-sidebar">
+          <!-- Node Inspector Card -->
+          <div class="topo-card" id="topo-inspector-card">
+            <div class="topo-card-header">
+              <span class="topo-card-title">Параметры узла</span>
+              <span class="topo-badge" id="insp-type-badge">—</span>
+            </div>
+            <div class="topo-card-body" id="topo-inspector-body">
+              <p class="topo-empty-hint">Выберите узел на схеме для настройки IP-адресации, маски и шлюза.</p>
+            </div>
+          </div>
+
+          <!-- Simulation Event Log -->
+          <div class="topo-card topo-log-card">
+            <div class="topo-card-header">
+              <span class="topo-card-title">Лог симуляции сети</span>
+              <button class="minimal-btn" id="topo-clear-log-btn" style="padding: 2px 8px; font-size: 11px;">Очистить</button>
+            </div>
+            <div class="topo-log-container" id="topo-log-container">
+              <div class="topo-log-empty">События сети будут отображаться здесь (Ping, статус линков, маршрутизация)...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        </div><!-- /.tab-views-container -->
+      </main><!-- /.app-main-content -->
+    </div><!-- /.app-body-container -->
+  </div><!-- /.app-shell -->
+
+  <!-- ====================================================================
+       AI TOPOLOGY GENERATOR MODAL
+       ==================================================================== -->
+  <div class="modal-overlay" id="topo-ai-modal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-top">
+        <span class="modal-top-tag">Генератор макета сети</span>
+        <button class="modal-close" id="topo-ai-close-btn" title="Закрыть (Esc)">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="topo-ai-intro">
+          <h2 class="modal-main-title" style="font-size: 20px;">Построение топологии по описанию</h2>
+          <p style="color: var(--text-secondary); font-size: 13.5px; margin-top: 4px;">
+            Опишите архитектуру сети простыми словами или выберите готовый шаблон. Генератор создаст устройства, настроит подсети и соединит узлы.
+          </p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="topo-ai-input">Текстовое описание сети:</label>
+          <textarea 
+            id="topo-ai-input" 
+            class="form-input" 
+            rows="3" 
+            placeholder="Например: Офис с маршрутизатором и коммутатором, два отдела (Бухгалтерия и IT), сервер баз данных и выход в Интернет через фаервол..."
+            style="resize: vertical; font-family: var(--font-sans); line-height: 1.5; font-size: 13.5px;"
+          ></textarea>
+        </div>
+
+        <div class="presets-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+          <span class="presets-label">Готовые архитектурные шаблоны:</span>
+          <div class="preset-chips" style="gap: 8px;">
+            <button class="preset-chip topo-preset-btn" data-preset="office_vlans">🏢 Офис с 2 отделами и VLAN</button>
+            <button class="preset-chip topo-preset-btn" data-preset="enterprise_dmz">🛡️ Корпоративная сеть с DMZ и WAF</button>
+            <button class="preset-chip topo-preset-btn" data-preset="spine_leaf">☁️ Дата-центр (Spine-Leaf)</button>
+            <button class="preset-chip topo-preset-btn" data-preset="branch_wan">🌐 Главный офис и 2 филиала (WAN)</button>
+            <button class="preset-chip topo-preset-btn" data-preset="star_simple">⭐ Топология «Звезда» (Router + 4 ПК)</button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px;">
+          <button class="minimal-btn" id="topo-ai-cancel-btn">Отмена</button>
+          <button class="accent-btn" id="topo-ai-generate-btn">
+            <span>✨ Построить топологию</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       HOTKEYS CHEAT SHEET MODAL
+       ==================================================================== -->
+  <div class="modal-overlay" id="hotkeys-modal">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-top">
+        <span class="modal-top-tag">Быстрая навигация</span>
+        <button class="modal-close" id="hotkeys-close-btn" title="Закрыть (Esc)">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-header-section" style="margin-bottom: 16px;">
+          <h2 class="modal-main-title" style="font-size: 19px;">Горячие клавиши NetPulse</h2>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">
+            Клавиатурные сокращения для мгновенного управления хабом
+          </p>
+        </div>
+        <div class="hotkeys-list">
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">1</span>
+              <span class="hk-dash">—</span>
+              <span class="hk-chip">6</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Переключение вкладок</span>
+              <span class="hk-sub">Словарь, OSI, Калькулятор, Симулятор, Порты, Конструктор</span>
+            </div>
+          </div>
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">⌘K</span>
+              <span class="hk-or">/</span>
+              <span class="hk-chip">/</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Глобальный быстрый поиск</span>
+              <span class="hk-sub">Фокус на строку поиска из любой вкладки</span>
+            </div>
+          </div>
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">Space</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Импульс струн сети</span>
+              <span class="hk-sub">Отправка резонансной волны по фоновой топологии</span>
+            </div>
+          </div>
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">M</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Звуковые эффекты</span>
+              <span class="hk-sub">Включение или отключение звуков интерфейса</span>
+            </div>
+          </div>
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">?</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Справка по клавишам</span>
+              <span class="hk-sub">Открыть это окно горячих клавиш</span>
+            </div>
+          </div>
+          <div class="hotkey-item">
+            <div class="hk-key-group">
+              <span class="hk-chip">Esc</span>
+            </div>
+            <div class="hk-info">
+              <span class="hk-title">Закрыть окно</span>
+              <span class="hk-sub">Закрытие активного модального окна</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       DETAIL INSPECTION MODAL
+       ==================================================================== -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-dialog">
+      <div class="modal-top">
+        <span class="modal-top-tag">Карточка протокола</span>
+        <button class="modal-close" id="modal-close-btn" title="Закрыть (Esc)">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="minimal-toast" id="cyber-toast"></div>
+
+  <!-- Vite Entry Point -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

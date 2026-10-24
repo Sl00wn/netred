@@ -1,0 +1,29 @@
+{
+  "name": "network-engineer-hub",
+  "private": true,
+  "version": "2.7.0",
+  "description": "High-Performance Network Engineer Hub, Protocol Lexicon & Interactive Topology Simulator in Colorpong Data Strings Aesthetic",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "network-engineer",
+    "networking",
+    "glossary",
+    "bgp",
+    "ospf",
+    "subnet-calculator",
+    "osi-model",
+    "futuristic",
+    "cyberpunk",
+    "vite"
+  ],
+  "author": "sl00wn",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}
